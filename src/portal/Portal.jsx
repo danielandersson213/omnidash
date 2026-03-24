@@ -32,6 +32,16 @@ const APPS = [
     accent: '#e8a020',
     bg: 'radial-gradient(ellipse at 50% 70%, rgba(232,160,32,0.15) 0%, transparent 70%)',
   },
+  {
+    id: 'github',
+    path: '/github',
+    name: 'GitHub Trending',
+    tagline: 'Repos · Languages · Stars',
+    description: 'Top trending repositories on GitHub right now, filtered by language and timeframe.',
+    icon: '⌥',
+    accent: '#3fb950',
+    bg: 'radial-gradient(ellipse at 60% 40%, rgba(63,185,80,0.12) 0%, transparent 70%)',
+  },
 ]
 
 export default function Portal() {

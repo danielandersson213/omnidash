@@ -10,7 +10,7 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/reddit/, ''),
       },
-      '/charts': {
+'/charts': {
         target: 'https://rss.marketingtools.apple.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/charts/, '/api/v2'),

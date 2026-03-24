@@ -2,6 +2,27 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+
+  /* Design tokens — scoped to the music app */
+  --bg:          #0D0C0B;
+  --surface:     #161412;
+  --surface-up:  #1D1A17;
+  --border:      rgba(234, 228, 217, 0.08);
+  --border-up:   rgba(234, 228, 217, 0.15);
+  --text:        #EAE4D9;
+  --text-muted:  rgba(234, 228, 217, 0.48);
+  --text-dim:    rgba(234, 228, 217, 0.28);
+  --accent:      #C8A770;
+  --accent-dim:  rgba(200, 167, 112, 0.12);
+  --red:         #E05555;
+  --red-dim:     rgba(224, 85, 85, 0.12);
+  --font-mono:   'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-song:   'Syne', sans-serif;
+  --trans:       0.15s ease;
+  --radius:      6px;
+  --radius-lg:   12px;
+  --header-h:    56px;
 }
 
 .main {

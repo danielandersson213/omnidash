@@ -5,6 +5,7 @@ import Portal from './portal/Portal'
 const ZenithApp = lazy(() => import('./apps/zenith/ZenithApp'))
 const RedditApp = lazy(() => import('./apps/reddit-mood/RedditApp'))
 const MusicApp = lazy(() => import('./apps/music-clock/MusicApp'))
+const GithubApp = lazy(() => import('./apps/github-trending/GithubApp'))
 
 function AppLoader() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/zenith" element={<ZenithApp />} />
         <Route path="/reddit" element={<RedditApp />} />
         <Route path="/music" element={<MusicApp />} />
+        <Route path="/github" element={<GithubApp />} />
       </Routes>
     </Suspense>
   )

@@ -420,6 +420,7 @@ async function fetchEarthquakes() {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   return data.features.map(f => ({
+    type:  'quake',
     lat:   f.geometry.coordinates[1],
     lon:   f.geometry.coordinates[0],
     depth: Math.round(f.geometry.coordinates[2]),
@@ -427,6 +428,53 @@ async function fetchEarthquakes() {
     place: f.properties.place,
     time:  f.properties.time,
   }));
+}
+
+const EONET_CATEGORIES = {
+  wildfires:      { label: 'Wildfire',     icon: '🔥', color: '#e85d04', fillColor: '#e85d04' },
+  volcanoes:      { label: 'Volcano',      icon: '🌋', color: '#ff6b35', fillColor: '#ff6b35' },
+  severeStorms:   { label: 'Severe Storm', icon: '🌀', color: '#4cc9f0', fillColor: '#4cc9f0' },
+  floods:         { label: 'Flood',        icon: '🌊', color: '#4361ee', fillColor: '#4361ee' },
+  seaLakeIce:     { label: 'Sea/Lake Ice', icon: '🧊', color: '#90e0ef', fillColor: '#90e0ef' },
+};
+
+async function fetchEonetEvents() {
+  const res = await fetch(
+    'https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=200'
+  );
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  const events = [];
+  for (const ev of data.events) {
+    const catId = ev.categories[0]?.id;   // e.g. "wildfires"
+    const meta  = EONET_CATEGORIES[catId];
+    if (!meta) continue;
+    // geometry is an array ordered newest-first; use the latest point
+    const geo = ev.geometry?.find(g => g.type === 'Point');
+    if (!geo) continue;
+    events.push({
+      type:  'eonet',
+      catId,
+      label: meta.label,
+      icon:  meta.icon,
+      title: ev.title,
+      lat:   geo.coordinates[1],
+      lon:   geo.coordinates[0],
+      date:  geo.date,
+    });
+  }
+  return events;
+}
+
+async function fetchAllEvents() {
+  const [quakes, eonet] = await Promise.allSettled([
+    fetchEarthquakes(),
+    fetchEonetEvents(),
+  ]);
+  return [
+    ...(quakes.status === 'fulfilled' ? quakes.value : []),
+    ...(eonet.status  === 'fulfilled' ? eonet.value  : []),
+  ];
 }
 
 async function fetchKpIndex() {
@@ -535,25 +583,46 @@ const SatelliteLayer = memo(
   (prev, next) => prev.satellites === next.satellites
 );
 
-const EarthquakeLayer = memo(
-  function EarthquakeLayer({ earthquakes }) {
-    return earthquakes.map((eq, i) => (
-      <CircleMarker
-        key={i}
-        center={[eq.lat, eq.lon]}
-        radius={eqRadius(eq.mag)}
-        pathOptions={eqStyle(eq.mag)}
-      >
-        <Tooltip direction="top" offset={[0, -4]} opacity={0.93}>
-          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11 }}>
-            M{eq.mag.toFixed(1)} · {eq.place}
-            <br />Depth {eq.depth} km · {new Date(eq.time).toLocaleDateString()}
-          </span>
-        </Tooltip>
-      </CircleMarker>
-    ));
+const EventsLayer = memo(
+  function EventsLayer({ events }) {
+    return events.map((ev, i) => {
+      if (ev.type === 'quake') {
+        return (
+          <CircleMarker
+            key={i}
+            center={[ev.lat, ev.lon]}
+            radius={eqRadius(ev.mag)}
+            pathOptions={eqStyle(ev.mag)}
+          >
+            <Tooltip direction="top" offset={[0, -4]} opacity={0.93}>
+              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11 }}>
+                🌍 M{ev.mag.toFixed(1)} · {ev.place}
+                <br />Depth {ev.depth} km · {new Date(ev.time).toLocaleDateString()}
+              </span>
+            </Tooltip>
+          </CircleMarker>
+        );
+      }
+      // EONET event
+      const meta = EONET_CATEGORIES[ev.catId] ?? { color: '#aaa', fillColor: '#aaa' };
+      return (
+        <CircleMarker
+          key={i}
+          center={[ev.lat, ev.lon]}
+          radius={7}
+          pathOptions={{ color: meta.color, fillColor: meta.fillColor, fillOpacity: 0.7, weight: 1.5 }}
+        >
+          <Tooltip direction="top" offset={[0, -4]} opacity={0.93}>
+            <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 11 }}>
+              {ev.icon} {ev.label} · {ev.title}
+              <br />{new Date(ev.date).toLocaleDateString()}
+            </span>
+          </Tooltip>
+        </CircleMarker>
+      );
+    });
   },
-  (prev, next) => prev.earthquakes === next.earthquakes
+  (prev, next) => prev.events === next.events
 );
 
 // ── UI Components ─────────────────────────────────────────────────────────────
@@ -819,8 +888,8 @@ function SearchBox({ onSelect }) {
 function Header({
   showCities, showFlights, flightsLoading, flightsError, flightCount,
   showNight, showSatellites, satellitesLoading, satellitesError, satelliteCount,
-  showEarthquakes, earthquakeCount, kpIndex,
-  onToggleCities, onToggleFlights, onToggleNight, onToggleSatellites, onToggleEarthquakes,
+  showEvents, eventCount, kpIndex,
+  onToggleCities, onToggleFlights, onToggleNight, onToggleSatellites, onToggleEvents,
   onSearch,
 }) {
   const moon = getMoonPhase();
@@ -854,8 +923,8 @@ function Header({
           {satellitesLoading ? 'Loading…' : satellitesError ? 'Sats ✕'
             : showSatellites && satelliteCount > 0 ? `Sats · ${satelliteCount}` : 'Satellites'}
         </button>
-        <button className={`toggle-btn${showEarthquakes ? ' active' : ''}`} onClick={onToggleEarthquakes}>
-          {showEarthquakes && earthquakeCount > 0 ? `Quakes · ${earthquakeCount}` : 'Quakes'}
+        <button className={`toggle-btn${showEvents ? ' active' : ''}`} onClick={onToggleEvents}>
+          {showEvents && eventCount > 0 ? `Events · ${eventCount}` : 'Events'}
         </button>
       </div>
       {kp && (
@@ -887,8 +956,8 @@ export default function App() {
   const [showSatellites,    setShowSatellites]    = useState(false);
   const [satellitesLoading, setSatellitesLoading] = useState(false);
   const [satellitesError,   setSatellitesError]   = useState(null);
-  const [earthquakes,     setEarthquakes]     = useState([]);
-  const [showEarthquakes, setShowEarthquakes] = useState(false);
+  const [events,     setEvents]     = useState([]);
+  const [showEvents, setShowEvents] = useState(false);
   const [showNight,       setShowNight]       = useState(true);
   const [kpIndex,         setKpIndex]         = useState(null);
   const [loadingCity,    setLoadingCity]    = useState(null);
@@ -962,13 +1031,13 @@ export default function App() {
     return () => clearInterval(id);
   }, [showSatellites, tleRecs]);
 
-  // Earthquakes — fetch on toggle, refresh every 10 min
+  // Events (earthquakes + EONET) — fetch on toggle, refresh every 10 min
   useEffect(() => {
-    if (!showEarthquakes) return;
-    fetchEarthquakes().then(setEarthquakes).catch(console.warn);
-    const id = setInterval(() => fetchEarthquakes().then(setEarthquakes).catch(console.warn), 10 * 60_000);
+    if (!showEvents) return;
+    fetchAllEvents().then(setEvents).catch(console.warn);
+    const id = setInterval(() => fetchAllEvents().then(setEvents).catch(console.warn), 10 * 60_000);
     return () => clearInterval(id);
-  }, [showEarthquakes]);
+  }, [showEvents]);
 
   // Kp index — fetch on mount, refresh every 30 min
   useEffect(() => {
@@ -1003,14 +1072,14 @@ export default function App() {
         satellitesLoading={satellitesLoading}
         satellitesError={satellitesError}
         satelliteCount={satellites.length}
-        showEarthquakes={showEarthquakes}
-        earthquakeCount={earthquakes.length}
+        showEvents={showEvents}
+        eventCount={events.length}
         kpIndex={kpIndex}
         onToggleCities={() => setShowCities(v => !v)}
         onToggleFlights={() => setShowFlights(v => !v)}
         onToggleNight={() => setShowNight(v => !v)}
         onToggleSatellites={() => setShowSatellites(v => !v)}
-        onToggleEarthquakes={() => setShowEarthquakes(v => !v)}
+        onToggleEvents={() => setShowEvents(v => !v)}
         onSearch={handleSearch}
       />
 
@@ -1041,7 +1110,7 @@ export default function App() {
           )}
           {showFlights     && <FlightLayer     flights={flights}         />}
           {showSatellites  && <SatelliteLayer  satellites={satellites}   />}
-          {showEarthquakes && <EarthquakeLayer earthquakes={earthquakes} />}
+          {showEvents && <EventsLayer events={events} />}
         </MapContainer>
       </div>
 

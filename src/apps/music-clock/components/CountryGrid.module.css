@@ -22,11 +22,13 @@
   padding: 5px 12px;
   border-radius: 999px;
   border: 1px solid var(--border);
+  background: transparent;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--text-muted);
   text-transform: uppercase;
+  cursor: pointer;
   transition: color var(--trans), border-color var(--trans), background var(--trans);
 }
 

@@ -53,10 +53,12 @@
   min-width: 200px;
   position: relative;
   background: transparent;
+  color: var(--text);
   border-bottom: 3px solid transparent;
   transition: background var(--trans), border-color var(--trans);
   text-align: left;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .item::before {

@@ -1,17 +1,17 @@
 .panel {
-  width: 280px;
-  flex-shrink: 0;
+  width: 300px;
   background: var(--surface);
   border: 1px solid var(--panel-color, var(--accent));
   border-radius: var(--radius-lg);
-  position: sticky;
+  position: fixed;
+  right: 20px;
   top: calc(var(--header-h) + 16px);
   max-height: calc(100vh - var(--header-h) - 32px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   animation: fadeUp 0.25s ease both;
-  align-self: flex-start;
+  z-index: 200;
 }
 
 .closeBtn {
