@@ -1,0 +1,611 @@
+:root {
+  --bg:        #060a10;
+  --bg2:       #0c1520;
+  --bg3:       #111a28;
+  --text:      #ddd8cc;
+  --text2:     #b0bfcc;
+  --muted:     #7a8a9a;
+  --gold:      #c4943a;
+  --cool:      #5a8ab0;
+  --teal:      #6aaa88;
+  --border:    rgba(255, 255, 255, 0.07);
+  --header-h:  56px;
+  --panel-w:   400px;
+}
+
+body { overflow: hidden; }
+
+.app-root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+
+.dash-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  z-index: 400;
+  background: rgba(6, 10, 16, 0.93);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.header-utc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+  min-width: 72px;
+}
+
+/* ── Search ────────────────────────────────────────────────────────────────── */
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 260px;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: var(--text);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input:focus        { border-color: rgba(196, 148, 58, 0.45); }
+.search-input::placeholder { color: var(--muted); }
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0; right: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 500;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+}
+
+.search-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.search-item:hover { background: rgba(255, 255, 255, 0.06); }
+
+.search-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+/* ── Layer toggles ──────────────────────────────────────────────────────────── */
+
+.layer-toggles {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.toggle-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--muted);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.toggle-btn.active             { background: rgba(196,148,58,0.15); border-color: rgba(196,148,58,0.4); color: var(--gold); }
+.toggle-btn.error              { background: rgba(184,48,48,0.12);  border-color: rgba(184,48,48,0.4);  color: #c06060; }
+.toggle-btn:hover:not(.active) { background: rgba(255,255,255,0.07); color: var(--text); }
+
+/* ── Aurora badge ───────────────────────────────────────────────────────────── */
+
+.aurora-badge {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  cursor: default;
+}
+.aurora-badge span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+
+/* ── Moon phase ─────────────────────────────────────────────────────────────── */
+
+.moon-phase {
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  cursor: default;
+}
+.moon-phase span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+}
+
+/* ── Map ────────────────────────────────────────────────────────────────────── */
+
+.map-root {
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0; bottom: 0;
+  z-index: 0;
+}
+
+.leaflet-top,
+.leaflet-bottom { z-index: 200 !important; }
+
+/* Dark tooltip theme */
+.leaflet-tooltip {
+  background: rgba(10, 16, 26, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  color: #ddd8cc !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  padding: 6px 10px !important;
+}
+.leaflet-tooltip::before { display: none !important; }
+
+/* ── City bubble markers ────────────────────────────────────────────────────── */
+
+.cb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cb-box {
+  background: rgba(6, 10, 16, 0.88);
+  border: 1.5px solid var(--bc, #c4943a);
+  border-radius: 10px;
+  padding: 2px 7px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: transform 0.12s, background 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+.cb:hover .cb-box { transform: scale(1.08); }
+.cb.sel   .cb-box { background: var(--bc, #c4943a); }
+
+.cb-i { font-size: 12px; line-height: 1; }
+.cb-t {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #ddd8cc;
+}
+
+.cb-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  margin-bottom: 2px;
+  transition: transform 0.12s;
+}
+.cb:hover .cb-dot { transform: scale(1.3); background: rgba(196, 148, 58, 0.5); border-color: rgba(196, 148, 58, 0.7); }
+.cb.sel   .cb-dot { background: #c4943a; border-color: #c4943a; }
+
+.cb-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.52);
+  margin-top: 2px;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+/* ── Satellite markers ──────────────────────────────────────────────────────── */
+
+.sat-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: default;
+  user-select: none;
+}
+
+.sat-sym {
+  font-size: 16px;
+  line-height: 1;
+  filter: drop-shadow(0 0 4px rgba(100, 180, 255, 0.6));
+  animation: sat-orbit 4s linear infinite;
+}
+
+@keyframes sat-orbit {
+  0%   { transform: scale(1);    }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1);    }
+}
+
+.sat-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: rgba(140, 200, 255, 0.8);
+  margin-top: 2px;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(100, 180, 255, 0.4);
+}
+
+/* ── Flight markers ─────────────────────────────────────────────────────────── */
+
+.fm {
+  font-size: 13px;
+  color: rgba(196, 148, 58, 0.72);
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(196, 148, 58, 0.35);
+  display: block;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  transform-origin: center center;
+}
+
+/* ── City panel ─────────────────────────────────────────────────────────────── */
+
+.city-panel {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  bottom: 0;
+  width: var(--panel-w);
+  z-index: 300;
+  background: rgba(10, 16, 26, 0.97);
+  border-left: 1px solid var(--border);
+  backdrop-filter: blur(18px);
+  overflow-y: auto;
+  animation: panel-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  scrollbar-width: thin;
+  scrollbar-color: #1e2e40 transparent;
+}
+
+@keyframes panel-in {
+  from { transform: translateX(30px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+.panel-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  color: var(--muted);
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s;
+  z-index: 1;
+}
+.panel-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+.panel-header {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-city-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 3px;
+  padding-right: 36px;
+}
+
+.panel-city-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+
+.live-clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 34px;
+  font-weight: 300;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  display: block;
+  line-height: 1.2;
+}
+
+.panel-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--text2);
+  font-style: italic;
+  margin-top: 3px;
+}
+
+.panel-section {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.panel-loading {
+  padding: 48px 20px;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── Weather block ──────────────────────────────────────────────────────────── */
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.wm-icon { font-size: 28px; line-height: 1; }
+
+.wm-temp {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 38px;
+  font-weight: 300;
+  color: var(--text);
+  line-height: 1;
+}
+
+.wm-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--text2);
+  font-style: italic;
+  align-self: flex-end;
+  padding-bottom: 5px;
+}
+
+.weather-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+}
+
+/* ── Wind compass ───────────────────────────────────────────────────────────── */
+
+.wind-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.wind-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wind-dir {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.wind-speed {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ── Wave block ─────────────────────────────────────────────────────────────── */
+
+.wave-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.wave-h {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  color: var(--cool);
+}
+
+.wave-d {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+/* ── Pollen ─────────────────────────────────────────────────────────────────── */
+
+.section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.pollen-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Sun bar ────────────────────────────────────────────────────────────────── */
+
+.sun-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sun-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text2);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.sun-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  position: relative;
+  overflow: visible;
+}
+
+.sun-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: linear-gradient(to right, rgba(196,148,58,0.35), #c4943a);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+.sun-dot {
+  position: absolute;
+  top: 50%;
+  width: 10px; height: 10px;
+  background: #c4943a;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 7px rgba(196, 148, 58, 0.55);
+}
+
+/* ── Sparkline ──────────────────────────────────────────────────────────────── */
+
+.sparkline-empty {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Forecast strip ─────────────────────────────────────────────────────────── */
+
+.forecast-strip {
+  display: flex;
+  flex-direction: column;
+}
+
+.forecast-day {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.forecast-day:last-child { border-bottom: none; }
+
+.fc-day {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  color: var(--text2);
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.fc-icon { font-size: 16px; }
+
+.fc-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--text2);
+  font-style: italic;
+  flex: 1;
+}
+
+.fc-max {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.fc-min {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text2);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}

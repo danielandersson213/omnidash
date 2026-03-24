@@ -1,0 +1,135 @@
+.portal {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 80px;
+}
+
+/* ── Header ── */
+.portal-header {
+  padding: 72px 0 48px;
+  text-align: center;
+}
+
+.portal-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.portal-logo-mark {
+  font-size: 28px;
+  color: var(--portal-accent);
+  line-height: 1;
+}
+
+.portal-logo-name {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #eaeef5;
+}
+
+.portal-sub {
+  color: var(--portal-muted);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+/* ── Grid ── */
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1080px;
+}
+
+/* ── Card ── */
+.portal-card {
+  position: relative;
+  background: var(--portal-surface);
+  border: 1px solid var(--portal-border);
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.portal-card:hover {
+  border-color: color-mix(in srgb, var(--card-accent) 60%, transparent);
+  transform: translateY(-3px);
+}
+
+.portal-card:active {
+  transform: translateY(0);
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: var(--card-bg);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.portal-card:hover .card-glow {
+  opacity: 1;
+}
+
+.card-icon {
+  font-size: 36px;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.card-body {
+  flex: 1;
+}
+
+.card-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #eaeef5;
+  margin-bottom: 4px;
+  letter-spacing: -0.2px;
+}
+
+.card-tagline {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--card-accent);
+  margin-bottom: 12px;
+}
+
+.card-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--portal-muted);
+}
+
+.card-arrow {
+  align-self: flex-end;
+  margin-top: 24px;
+  font-size: 18px;
+  color: var(--card-accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.portal-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}

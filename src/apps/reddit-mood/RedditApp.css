@@ -1,0 +1,504 @@
+.app {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 15%, var(--mb, rgba(0,25,15,0.6)) 0%, transparent 70%),
+    #060608;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 6rem;
+  transition: background 4s ease;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Grain ── */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+/* ── Header ── */
+header {
+  padding: 3.5rem 1rem 0.5rem;
+  text-align: center;
+}
+
+.site-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--mc) 65%, #999 35%);
+  transition: color 4s ease;
+}
+
+.site-sub {
+  font-size: 0.7rem;
+  color: #363640;
+  letter-spacing: 0.12em;
+  margin-top: 0.3rem;
+}
+
+/* ── Loading ── */
+.loading-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding-top: 8rem;
+}
+
+.loading-orb {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #252530, #0c0c10);
+  box-shadow: 0 0 40px rgba(80,80,100,0.12);
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+.loading-text {
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: #303038;
+  animation: fade-pulse 2s ease-in-out infinite;
+}
+
+.dots::after {
+  content: '';
+  animation: ellipsis 1.5s steps(4, end) infinite;
+}
+
+/* ── Main ── */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 820px;
+  padding: 0 1.5rem;
+}
+
+/* ── Orb ── */
+.orb-wrap {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2.5rem 0 1rem;
+  transition: opacity 0.4s ease;
+}
+
+.orb-wrap.pulse { opacity: 0.35; }
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--mc) 18%, transparent);
+  transition: border-color 4s ease;
+}
+.r1 { width: 198px; height: 198px; animation: ring-pulse 3.5s ease-in-out infinite; }
+.r2 { width: 244px; height: 244px; animation: ring-pulse 3.5s ease-in-out infinite 0.6s; }
+.r3 { width: 290px; height: 290px; animation: ring-pulse 3.5s ease-in-out infinite 1.2s; }
+
+.orb {
+  position: relative;
+  width: 164px;
+  height: 164px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: breathe 4s ease-in-out infinite;
+  box-shadow:
+    0 0 25px  color-mix(in srgb, var(--mg) 70%, transparent),
+    0 0 60px  color-mix(in srgb, var(--mg) 35%, transparent),
+    0 0 110px color-mix(in srgb, var(--mg) 18%, transparent),
+    0 0 180px color-mix(in srgb, var(--mg) 8%,  transparent);
+  transition: box-shadow 4s ease;
+}
+
+.orb-surface {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 38% 33%,
+    color-mix(in srgb, var(--mc) 90%, #fff 10%) 0%,
+    var(--mc) 28%,
+    color-mix(in srgb, var(--mg) 85%, #000 15%) 58%,
+    #08080e 100%
+  );
+  transition: background 4s ease;
+}
+
+.orb-blob {
+  position: absolute;
+  width: 55%; height: 55%;
+  top: 18%; left: 14%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mc) 40%, transparent);
+  filter: blur(22px);
+  animation: blob 7s ease-in-out infinite;
+  transition: background 4s ease;
+}
+
+.orb-shine {
+  position: absolute;
+  width: 32%; height: 22%;
+  top: 16%; left: 20%;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  filter: blur(5px);
+  transform: rotate(-30deg);
+}
+
+.orb-label {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.orb-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 0 18px rgba(255,255,255,0.4);
+}
+
+.orb-pct {
+  font-size: 0.62rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.1em;
+}
+
+/* ── Mood line ── */
+.mood-line {
+  font-size: 0.9rem;
+  color: #404048;
+  letter-spacing: 0.04em;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.mood-line em {
+  font-style: normal;
+  color: var(--mc);
+  transition: color 4s ease;
+}
+
+/* ── Shared panel ── */
+.panel {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #2e2e38;
+  margin-bottom: 1rem;
+}
+
+/* ── Why so X ── */
+.why-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.why-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.why-sub {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--mc) 70%, #777 30%);
+  font-family: 'JetBrains Mono', monospace;
+  transition: color 4s ease;
+}
+
+.why-title {
+  font-size: 0.82rem;
+  color: #777;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* ── Mood trail ── */
+.trail {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.trail-orb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: default;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+  position: relative;
+}
+
+.trail-orb::before {
+  content: '';
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, color-mix(in srgb, var(--hc) 90%, #fff 10%), var(--hc) 50%, #0a0a10);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--hc) 50%, transparent);
+  display: block;
+}
+
+.trail-orb.trail-current {
+  opacity: 1;
+}
+
+.trail-orb.trail-current::before {
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--hc) 70%, transparent);
+}
+
+.trail-name {
+  font-size: 0.58rem;
+  color: var(--hc);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.trail-time {
+  font-size: 0.54rem;
+  color: #333;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Arrow between trail orbs */
+.trail-orb:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  right: -0.55rem;
+  top: 8px;
+  font-size: 0.6rem;
+  color: #252530;
+}
+
+/* ── Chips ── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.5rem;
+  justify-content: center;
+  max-width: 720px;
+  margin-bottom: 1.25rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  cursor: default;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.chip:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: color-mix(in srgb, var(--sc) 35%, transparent);
+  transform: translateY(-2px);
+}
+
+.chip-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--sc);
+  box-shadow: 0 0 5px var(--sc);
+  flex-shrink: 0;
+}
+
+.chip-name {
+  font-size: 0.68rem;
+  color: #666;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.chip-mood {
+  font-size: 0.62rem;
+  color: color-mix(in srgb, var(--sc) 80%, #aaa 20%);
+  font-style: italic;
+}
+
+/* ── Tension ── */
+.tension {
+  font-size: 0.72rem;
+  color: #444;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  font-style: italic;
+  max-width: 500px;
+}
+
+/* ── Word cloud ── */
+.cloud-panel .cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.cloud-word {
+  color: color-mix(in srgb, var(--mc) 60%, #777 40%);
+  transition: color 4s ease;
+  cursor: default;
+  line-height: 1.5;
+}
+
+.cloud-word:hover { color: var(--mc); }
+
+/* ── Forecast ── */
+.forecast {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.forecast-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+}
+
+.forecast-time {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--mc) 60%, #555 40%);
+  transition: color 4s ease;
+}
+
+.forecast-line {
+  font-size: 0.75rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ── Footer ── */
+.foot {
+  font-size: 0.65rem;
+  color: #2a2a33;
+  letter-spacing: 0.1em;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.sep { color: #1e1e26; }
+
+/* ── Emoji shower ── */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  top: -3rem;
+  animation: fall linear forwards;
+  will-change: transform, opacity;
+}
+
+.particle.spin {
+  animation-name: fall-spin;
+}
+
+/* ── Animations ── */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.045); }
+}
+
+@keyframes ring-pulse {
+  0%, 100% { opacity: 0.65; transform: scale(1); }
+  50%       { opacity: 0.18; transform: scale(1.06); }
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0,    0)    scale(1);    }
+  33%       { transform: translate(10px, -6px) scale(1.12); }
+  66%       { transform: translate(-6px, 9px)  scale(0.9);  }
+}
+
+@keyframes fade-pulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.75; }
+}
+
+@keyframes ellipsis {
+  0%   { content: '';    }
+  25%  { content: '.';   }
+  50%  { content: '..';  }
+  75%  { content: '...'; }
+}
+
+@keyframes fall {
+  0%   { transform: translateY(0)   translateX(0);      opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(105vh) translateX(20px);  opacity: 0; }
+}
+
+@keyframes fall-spin {
+  0%   { transform: translateY(0)     rotate(0deg);    opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(540deg);  opacity: 0; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .forecast { grid-template-columns: 1fr; }
+  .trail { justify-content: center; }
+}
