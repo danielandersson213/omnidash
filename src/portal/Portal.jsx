@@ -3,6 +3,16 @@ import './Portal.css'
 
 const APPS = [
   {
+    id: 'bestiary',
+    path: '/bestiary',
+    name: 'Bestiary',
+    tagline: 'D&D 5e · 334 creatures · Stat blocks',
+    description: 'Browse all 334 monsters from the D&D 5e SRD. Full stat blocks with abilities, actions, and legendary powers.',
+    icon: '⚔',
+    accent: '#8f2020',
+    bg: 'radial-gradient(ellipse at 35% 65%, rgba(143,32,32,0.16) 0%, transparent 70%)',
+  },
+  {
     id: 'zenith',
     path: '/zenith',
     name: 'Zenith',

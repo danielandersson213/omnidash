@@ -5,6 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/dnd': {
+        target: 'https://www.dnd5eapi.co',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/dnd/, ''),
+      },
       '/reddit': {
         target: 'https://www.reddit.com',
         changeOrigin: true,

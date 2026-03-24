@@ -1,0 +1,223 @@
+/* ── Block container ─────────────────────── */
+.block {
+  position: relative;
+  padding: 28px 32px 36px;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* Large decorative type glyph behind content */
+.bgGlyph {
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 180px;
+  color: rgba(143, 30, 30, 0.06);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ── Top two-column layout ───────────────── */
+.topSection {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.statContent {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* ── Monster image (right column) ────────── */
+.imageWrap {
+  width: 200px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(143, 32, 32, 0.2);
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: saturate(0.85) contrast(1.05);
+}
+
+/* ── Header ──────────────────────────────── */
+.header {
+  position: relative;
+  margin-bottom: 2px;
+}
+
+.name {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #C42B1A;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.typeStr {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--muted);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* ── Red rule ────────────────────────────── */
+.rule {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, #8F2020 0%, rgba(143,32,32,0.15) 100%);
+  margin: 14px 0;
+}
+
+/* ── Base stats ──────────────────────────── */
+.basics {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.basicRow {
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Shared label style ──────────────────── */
+.label {
+  font-weight: 700;
+  color: #8F2020;
+  flex-shrink: 0;
+}
+
+/* ── Ability score grid ──────────────────── */
+.abilities {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  text-align: center;
+}
+
+.ability {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.abilityLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #8F2020;
+}
+
+.abilityScore {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.abilityMod {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Properties list ─────────────────────── */
+.props {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.propRow {
+  line-height: 1.5;
+}
+
+.crBadge {
+  font-weight: 700;
+  color: var(--gold);
+  font-size: 15px;
+}
+
+.xp {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ── Section title (Actions etc.) ────────── */
+.sectionTitle {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 17px;
+  font-variant: small-caps;
+  font-weight: 700;
+  color: #C42B1A;
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+}
+
+/* ── Features (abilities / actions) ─────── */
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feature {
+  margin: 0;
+  color: var(--text);
+}
+
+.featureName {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--text);
+  font-style: normal;
+}
+
+/* ── Empty / loading states ──────────────── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.emptyGlyph {
+  font-size: 40px;
+  opacity: 0.3;
+}
+
+.skeleton {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.skeletonLine {
+  height: 14px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.05);
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
+}
